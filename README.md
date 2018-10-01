@@ -23,7 +23,7 @@ Run your local jenkins environment with docker-compose:
 cd $HOME/local-jenkins-pipeline-demo
 docker-compose ps
 docker-compose down
-docker-compose start -d
+docker-compose up -d
 docker-compose ps
 ```
 
