@@ -1,0 +1,6 @@
+.*
+docs
+docker-compose.yml
+test*
+*.md
+Jenkinsfile

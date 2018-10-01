@@ -1,0 +1,10 @@
+#!/bin/sh
+BRANCHNAME=$(git rev-parse --abbrev-ref HEAD)
+MASTERBRANCH="master"
+GITUSER="local-git"
+GITPASS="Password123"
+JOBNAME="pipelinedemo"
+
+curl -XPOST -u ${GITUSER}:${GITPASS} "http://localhost:8787/job/${JOBNAME}/build"
+echo "Build triggered successfully on branch: ${BRANCHNAME}"
+

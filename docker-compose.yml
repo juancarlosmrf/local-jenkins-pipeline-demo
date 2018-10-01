@@ -1,0 +1,26 @@
+# ------------------------------------------------------------------------------
+# Ref: https://docs.docker.com/compose/compose-file/
+# 
+# Install docker for Mac: 
+# https://www.docker.com/products/docker
+# 
+# docker-compose -p local-jenkins down
+# docker-compose -p local-jenkins up -d
+# docker-compose -p local-jenkins logs
+# 
+# Use the password from the logs output to access the instance.
+# http://localhost:8787/
+# ------------------------------------------------------------------------------
+version: "2"
+
+services:
+  local-jenkins:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8787:8080"
+      - "50000:50000"
+    volumes:
+      - /var/jenkins_home
+    restart: "always"
