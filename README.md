@@ -14,6 +14,7 @@
 cd $HOME
 git clone git@github.com:juancarlosmrf/local-jenkins-pipeline-demo.git
 ```
+
 ## Jenkins Docker.
 You can find a Dockerfile and a docker-compose.yml file in the root of the demo repository.
 
@@ -21,8 +22,8 @@ Run your local jenkins environment with docker-compose:
 ```
 cd $HOME/local-jenkins-pipeline-demo
 docker-compose ps
-docker-compose stop
-docker-compose start
+docker-compose down
+docker-compose start -d
 docker-compose ps
 ```
 
@@ -47,20 +48,21 @@ jenkins@b82713f4fad2:/$ ssh-keygen
 Press enter/enter/enter... on all questions until you get the prompt back.
 
 Copy the key to your computer/laptop:
-Enable the SSH remote access in your laptop and get your local laptop IP. We will use this 172.17.0.1 in this documentation, you have to change it.
+Enable the SSH remote access in your laptop ( sudo systemsetup -setremotelogin on ).
+
 
 **Note:** Change "myuser" for your local user in your laptop.
 ```
-jenkins@b82713f4fad2:/$ ssh-copy-id myuser@172.17.0.1
+jenkins@b82713f4fad2:/$ ssh-copy-id myuser@host.docker.internal
 ```
 **Remember:**
-myuser = your username and 172.17.0.1 is the ip address to your computer from within the docker container.
+myuser = your username and host.docker.internal is the host address to your computer from within the docker container.
 
 You will have to type your password at this point.!!!!!
 
 Now lets try to complete the loop by ssh-ing to your computer from within the docker container.
 ```
-jenkins@b82713f4fad2:/$ ssh myuser@172.17.0.1
+jenkins@b82713f4fad2:/$ ssh myuser@host.docker.internal
 ```
 This time you should **not** need to enter you password. If you do so... something went wrong and you have to try again :-(
 
@@ -112,13 +114,13 @@ Click on New Item in the Jenkins menu:
 In the Pipeline section:
 - Select Pipeline script from SCM
 In the Repository URL field:
-- enter myuser@172.17.0.1:local-jenkins-pipeline-demo/.git (**Note:** be aware with the username and IP !!!)
+- enter myuser@host.docker.internal:local-jenkins-pipeline-demo/.git (**Note:** be aware with the username !!!)
 - in the Script Path field enter "Jenkinsfile" (we assume it is in the root of the repos)
 Save the "pipelinedemo" project
 Build the "pipelinedemo" manually once (this is needed for the Poll SCM to start working).
 
 ## Create the git hook (in local git repository)
-Got to the local git cloned code directory and copy de hook in hooks_template directory to the **"/home/myuser/local-jenkins-pipeline-demo/.git/hooks"** folder and create a file called post-commit, and do it executable.
+Got to the local git cloned code directory and copy the hook in hooks_template directory to the **"/home/myuser/local-jenkins-pipeline-demo/.git/hooks"** folder and create a file called post-commit, and do it executable.
 ```
 cd $HOME/local-jenkins-pipeline-demo
 cp hooks_template/post-commit .git/hooks/
@@ -134,5 +136,8 @@ Check in Jenkins if your "pipelinedemo" project was triggered.
 
 Finally make some arbitrary change to your project, add the changes and do a commit.
 This will now trigger the pipeline in your local Jenkins.
+
+
+* http://localhost:8787/configureSecurity/ CSRF Protection to Off
 
 Happy Demo!
